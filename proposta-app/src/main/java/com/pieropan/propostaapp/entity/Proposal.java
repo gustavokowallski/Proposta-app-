@@ -26,7 +26,7 @@ public class Proposal {
 
     private String observation;
 
-    @ManyToOne
+    @ManyToOne(cascade =  CascadeType.PERSIST )
     @JoinColumn(name = "patient_id")
     private User user;
 
