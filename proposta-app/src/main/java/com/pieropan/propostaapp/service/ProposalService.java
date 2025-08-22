@@ -8,6 +8,8 @@ import com.pieropan.propostaapp.repository.ProposalRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProposalService {
 
@@ -22,5 +24,12 @@ public class ProposalService {
     public ProposalResponseDto createProposal(ProposalRequestDto dto){
         Proposal entity = ProposalMapper.INSTANCE.convertDtoToProprosal(dto);
         return ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<ProposalResponseDto> findAll(){
+        List<Proposal> proposalList  = proposalRepository.findAll();
+        return proposalList.stream().map(ProposalMapper.INSTANCE::convertEntityToDto).toList();
     }
 }
