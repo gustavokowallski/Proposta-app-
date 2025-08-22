@@ -18,7 +18,7 @@ public class Proposal {
 
     private Double requestedAmount;
 
-    private LocalDateTime paymentTerm;
+    private Integer paymentTerm;
 
     private Boolean approved;
 
@@ -30,7 +30,7 @@ public class Proposal {
     @JoinColumn(name = "patient_id")
     private User user;
 
-    public Proposal(Long id, User user, String observation, Boolean integrated, Boolean approved, LocalDateTime paymentTerm, Double requestedAmount) {
+    public Proposal(Long id, User user, String observation, Boolean integrated, Boolean approved, Integer paymentTerm, Double requestedAmount) {
         this.id = id;
         this.user = user;
         this.observation = observation;
