@@ -3,6 +3,7 @@ package com.pieropan.propostaapp.service;
 import com.pieropan.propostaapp.dto.ProposalRequestDto;
 import com.pieropan.propostaapp.dto.ProposalResponseDto;
 import com.pieropan.propostaapp.entity.Proposal;
+import com.pieropan.propostaapp.mapper.ProposalMapper;
 import com.pieropan.propostaapp.repository.ProposalRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +20,7 @@ public class ProposalService {
 
     @Transactional
     public ProposalResponseDto createProposal(ProposalRequestDto dto){
-        Proposal entity = new Proposal();
-         entity = proposalRepository.save(entity);
-        return null;
+        Proposal entity = ProposalMapper.INSTANCE.convertDtoToProprosal(dto);
+        return ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
     }
 }

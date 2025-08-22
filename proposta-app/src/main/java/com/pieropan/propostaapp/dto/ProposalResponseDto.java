@@ -13,6 +13,7 @@ public class ProposalResponseDto {
     private String name;
     private String lastName;
     private String phone;
+    private String cpf;
     private Double income;
     private  Double requestedAmount;
     private Integer paymentTerm;
