@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -24,6 +26,9 @@ public class User {
     private String phone;
 
     private Double income;
+
+    @OneToMany(mappedBy = "user")
+    private List<Proposal> proposals;
 
     public User(Long id, Double income, String phone, String cpf, String lastName, String name) {
         this.id = id;
