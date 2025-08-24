@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.text.NumberFormat;
+
 @Mapper
 public interface ProposalMapper {
 
@@ -20,6 +22,7 @@ public interface ProposalMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approved", ignore = true)
     @Mapping(target = "observation", ignore = true)
+    @Mapping(target = "integrated", ignore = true)
     Proposal convertDtoToProprosal(ProposalRequestDto proposalRequestDto);
 
 
@@ -28,6 +31,10 @@ public interface ProposalMapper {
     @Mapping(target = "phone", source = "user.phone")
     @Mapping(target = "cpf", source = "user.cpf")
     @Mapping(target = "income", source = "user.income")
+    @Mapping(target = "requestedAmount",  expression = "java(setRequestedAmount(entity))")
     ProposalResponseDto convertEntityToDto(Proposal entity);
 
+    default String setRequestedAmount(Proposal proposal){
+        return NumberFormat.getCurrencyInstance().format(proposal.getRequestedAmount());
+    }
 }
