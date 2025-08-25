@@ -28,7 +28,7 @@ public class ProposalService {
 
         ProposalResponseDto response = ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
 
-        notificationService.notify(response, "proposta-pendente.ex" );
+        notificationService.notify(response, "proposta-pedente.ex" );
 
         return response;
     }
