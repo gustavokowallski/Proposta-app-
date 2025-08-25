@@ -5,6 +5,7 @@ import com.pieropan.propostaapp.dto.ProposalResponseDto;
 import com.pieropan.propostaapp.entity.Proposal;
 import com.pieropan.propostaapp.mapper.ProposalMapper;
 import com.pieropan.propostaapp.repository.ProposalRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +15,16 @@ import java.util.List;
 public class ProposalService {
 
     private final ProposalRepository proposalRepository;
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
 
-    public ProposalService(ProposalRepository proposalRepository, NotificationService notificationService) {
+    private final String exchange;
+
+    public ProposalService(ProposalRepository proposalRepository,
+                           NotificationService notificationService,
+                           @Value("${rabbitmq.pendingproposal.exchange}") String exchange) {
         this.proposalRepository = proposalRepository;
         this.notificationService = notificationService;
+        this.exchange = exchange;
     }
 
 
@@ -26,9 +32,8 @@ public class ProposalService {
     public ProposalResponseDto createProposal(ProposalRequestDto dto){
         Proposal entity = ProposalMapper.INSTANCE.convertDtoToProprosal(dto);
 
+        notifyProposal(entity);
         ProposalResponseDto response = ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
-
-        notificationService.notify(response, "proposta-pedente.ex" );
 
         return response;
     }
@@ -38,5 +43,14 @@ public class ProposalService {
     public List<ProposalResponseDto> findAll(){
         List<Proposal> proposalList  = proposalRepository.findAll();
         return proposalList.stream().map(ProposalMapper.INSTANCE::convertEntityToDto).toList();
+    }
+    public void notifyProposal(Proposal entity){
+        try{
+            notificationService.notify(entity, exchange);
+        }catch(RuntimeException ex){
+            entity.setIntegrated(false);
+            proposalRepository.save(entity);
+        }
+
     }
 }

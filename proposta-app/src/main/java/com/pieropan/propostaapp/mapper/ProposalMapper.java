@@ -22,7 +22,7 @@ public interface ProposalMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "approved", ignore = true)
     @Mapping(target = "observation", ignore = true)
-    @Mapping(target = "integrated", ignore = true)
+    @Mapping(target = "integrated", constant = "true")
     Proposal convertDtoToProprosal(ProposalRequestDto proposalRequestDto);
 
 

@@ -3,6 +3,7 @@ package com.pieropan.propostaapp.service;
 
 import com.pieropan.propostaapp.dto.ProposalRequestDto;
 import com.pieropan.propostaapp.dto.ProposalResponseDto;
+import com.pieropan.propostaapp.entity.Proposal;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class NotificationService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void notify(ProposalResponseDto responseDto, String exchange){
-        rabbitTemplate.convertAndSend(exchange, "", responseDto);
+    public void notify(Proposal entity, String exchange){
+        rabbitTemplate.convertAndSend(exchange, "", entity);
     }
 }
