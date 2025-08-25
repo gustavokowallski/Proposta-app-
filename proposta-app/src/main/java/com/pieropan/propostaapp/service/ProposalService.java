@@ -14,16 +14,23 @@ import java.util.List;
 public class ProposalService {
 
     private final ProposalRepository proposalRepository;
+    private NotificationService notificationService;
 
-    public ProposalService(ProposalRepository proposalRepository) {
+    public ProposalService(ProposalRepository proposalRepository, NotificationService notificationService) {
         this.proposalRepository = proposalRepository;
+        this.notificationService = notificationService;
     }
 
 
     @Transactional
     public ProposalResponseDto createProposal(ProposalRequestDto dto){
         Proposal entity = ProposalMapper.INSTANCE.convertDtoToProprosal(dto);
-        return ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
+
+        ProposalResponseDto response = ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
+
+        notificationService.notify(response, "proposta-pendente.ex" );
+
+        return response;
     }
 
 

@@ -1,8 +1,8 @@
 package com.pieropan.propostaapp.config;
 
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
+
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -43,4 +43,23 @@ public class RabbitMQConfiguration {
     public ApplicationListener<ApplicationReadyEvent> initializeAdmin(RabbitAdmin rabbitAdmin){
         return event ->  rabbitAdmin.initialize();
     }
+
+    @Bean
+    public FanoutExchange createFanoutExchangePendingProposal(){
+        return ExchangeBuilder.fanoutExchange("proposta-pedente.ex").build();
+    }
+
+    @Bean
+    public Binding createBindingProposalAnalysisCreditQueue(){
+        return BindingBuilder.bind(pendingProposalAnalysisQueue())
+                .to(createFanoutExchangePendingProposal());
+    }
+
+    @Bean
+    public Binding createBindingPendingProposalNotification(){
+        return BindingBuilder.bind(pendingProposalNotificationQueue())
+                .to(createFanoutExchangePendingProposal());
+    }
+
+
 }
