@@ -1,5 +1,6 @@
 package com.pieropan.propostaapp.scheduler;
 
+import com.pieropan.propostaapp.entity.Proposal;
 import com.pieropan.propostaapp.repository.ProposalRepository;
 import com.pieropan.propostaapp.service.NotificationRabbitService;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +26,15 @@ public class NonIntegratedProposal {
         proposalRepository.findAllByIntegratedIsFalse().forEach(proposal ->{
             try{
                 notificationRabbitService.notify(proposal, exchange);
-                proposal.setIntegrated(true);
-                proposalRepository.save(proposal);
+               updateProposal(proposal);
             } catch (RuntimeException ex) {
-                    
+                throw new RuntimeException(ex.getMessage());
             }
-
         });
+    }
+
+    private void updateProposal(Proposal proposal){
+        proposal.setIntegrated(true);
+        proposalRepository.save(proposal);
     }
 }
