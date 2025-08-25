@@ -34,4 +34,6 @@ public class ProposalController {
         List<ProposalResponseDto> proposal = proposalService.findAll();
         return ResponseEntity.ok(proposal);
     }
+
 }
+

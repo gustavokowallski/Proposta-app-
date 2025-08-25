@@ -1,17 +1,15 @@
 package com.pieropan.propostaapp.service;
 
 
-import com.pieropan.propostaapp.dto.ProposalRequestDto;
-import com.pieropan.propostaapp.dto.ProposalResponseDto;
 import com.pieropan.propostaapp.entity.Proposal;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotificationService {
+public class NotificationRabbitService {
     private final RabbitTemplate rabbitTemplate;
 
-    public NotificationService(RabbitTemplate rabbitTemplate) {
+    public NotificationRabbitService(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 

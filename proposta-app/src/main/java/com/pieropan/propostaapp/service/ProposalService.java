@@ -15,15 +15,15 @@ import java.util.List;
 public class ProposalService {
 
     private final ProposalRepository proposalRepository;
-    private final NotificationService notificationService;
+    private final NotificationRabbitService notificationRabbitService;
 
     private final String exchange;
 
     public ProposalService(ProposalRepository proposalRepository,
-                           NotificationService notificationService,
+                           NotificationRabbitService notificationRabbitService,
                            @Value("${rabbitmq.pendingproposal.exchange}") String exchange) {
         this.proposalRepository = proposalRepository;
-        this.notificationService = notificationService;
+        this.notificationRabbitService = notificationRabbitService;
         this.exchange = exchange;
     }
 
@@ -44,9 +44,11 @@ public class ProposalService {
         List<Proposal> proposalList  = proposalRepository.findAll();
         return proposalList.stream().map(ProposalMapper.INSTANCE::convertEntityToDto).toList();
     }
+
+
     public void notifyProposal(Proposal entity){
         try{
-            notificationService.notify(entity, exchange);
+            notificationRabbitService.notify(entity, exchange);
         }catch(RuntimeException ex){
             entity.setIntegrated(false);
             proposalRepository.save(entity);
