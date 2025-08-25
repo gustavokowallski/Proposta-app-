@@ -4,7 +4,10 @@ import com.pieropan.propostaapp.entity.Proposal;
 import com.pieropan.propostaapp.repository.ProposalRepository;
 import com.pieropan.propostaapp.service.NotificationRabbitService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class NonIntegratedProposal {
@@ -22,6 +25,7 @@ public class NonIntegratedProposal {
         this.exchange = exchange;
     }
 
+    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
     public void searchNonIntegratedProposal(){
         proposalRepository.findAllByIntegratedIsFalse().forEach(proposal ->{
             try{
