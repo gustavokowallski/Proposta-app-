@@ -14,10 +14,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfiguration {
-    private final String exchange;
+    private final String exchangePendingProposal;
+    private final String exchangeCompletedProposal;
 
-    public RabbitMQConfiguration(@Value("${rabbitmq.pendingproposal.exchange}") String exchange){
-        this.exchange = exchange;
+    public RabbitMQConfiguration(@Value("${rabbitmq.pendingproposal.exchange}") String exchangePendingProposal,
+                                 @Value("${rabbitmq.proposalcompleted.exchange}") String exchangeCompletedProposal){
+        this.exchangePendingProposal = exchangePendingProposal;
+        this.exchangeCompletedProposal = exchangeCompletedProposal;
     }
 
 
@@ -26,20 +29,13 @@ public class RabbitMQConfiguration {
         return QueueBuilder.durable("proposta-pendente.ms-analise-credito").build();
     }
 
-    @Bean
-    public Queue pendingProposalNotificationQueue(){
-        return QueueBuilder.durable("proposta-pendente.ms-notificacao").build();
-    }
+
 
     @Bean
     public Queue completedProposalAnalysisQueue(){
         return QueueBuilder.durable("proposta-concluida.ms-analise-credito").build();
     }
 
-    @Bean
-    public Queue completedProposalNotificationQueue(){
-        return QueueBuilder.durable("proposta-concluida.ms-notificacao").build();
-    }
 
     @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory connectionFactory){
@@ -53,19 +49,22 @@ public class RabbitMQConfiguration {
 
     @Bean
     public FanoutExchange createFanoutExchangePendingProposal(){
-        return ExchangeBuilder.fanoutExchange(exchange).build();
+        return ExchangeBuilder.fanoutExchange(exchangePendingProposal).build();
+    }
+    @Bean
+    public FanoutExchange createFanoutExchangeCompletedProposal(){
+        return ExchangeBuilder.fanoutExchange(exchangeCompletedProposal).build();
     }
 
     @Bean
-    public Binding createBindingProposalAnalysisCreditQueue(){
+    public Binding createBindingPendingProposalAnalysisCreditQueue(){
         return BindingBuilder.bind(pendingProposalAnalysisQueue())
                 .to(createFanoutExchangePendingProposal());
     }
-
     @Bean
-    public Binding createBindingPendingProposalNotification(){
-        return BindingBuilder.bind(pendingProposalNotificationQueue())
-                .to(createFanoutExchangePendingProposal());
+    public Binding createBindingProposalCompletedAnalysisCreditQueue(){
+        return BindingBuilder.bind(completedProposalAnalysisQueue())
+                .to(createFanoutExchangeCompletedProposal());
     }
 
     @Bean

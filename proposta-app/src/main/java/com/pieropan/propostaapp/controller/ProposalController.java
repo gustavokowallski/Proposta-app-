@@ -29,7 +29,7 @@ public class ProposalController {
         return ResponseEntity.created(uri).body(result);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping()
     public ResponseEntity<List<ProposalResponseDto>> findAllProposal(){
         List<ProposalResponseDto> proposal = proposalService.findAll();
         return ResponseEntity.ok(proposal);

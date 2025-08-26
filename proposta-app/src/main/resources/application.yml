@@ -5,6 +5,8 @@ spring:
 rabbitmq:
   pendingproposal:
     exchange: proposta-pedente.ex
+  proposalcompleted:
+    exchange: proposta-concluida.ex
 
 ---
 spring:
