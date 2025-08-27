@@ -3,10 +3,13 @@ spring:
     active: ${APP_PROFILE:test}
 
 rabbitmq:
+  queue:
+    proposalcompleted: proposta-concluida.ms-analise-credito
   pendingproposal:
     exchange: proposta-pedente.ex
   proposalcompleted:
     exchange: proposta-concluida.ex
+
 
 ---
 spring:
