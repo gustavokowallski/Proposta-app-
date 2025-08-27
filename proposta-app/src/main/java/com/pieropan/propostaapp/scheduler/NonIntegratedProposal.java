@@ -30,15 +30,10 @@ public class NonIntegratedProposal {
         proposalRepository.findAllByIntegratedIsFalse().forEach(proposal ->{
             try{
                 notificationRabbitService.notify(proposal, exchange);
-               updateProposal(proposal);
+               proposalRepository.updateIntegratedStatus(proposal.getId(), true);
             } catch (RuntimeException ex) {
                 throw new RuntimeException(ex.getMessage());
             }
         });
-    }
-
-    private void updateProposal(Proposal proposal){
-        proposal.setIntegrated(true);
-        proposalRepository.save(proposal);
     }
 }

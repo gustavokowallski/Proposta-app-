@@ -17,6 +17,11 @@ public interface ProposalRepository extends JpaRepository<Proposal, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE proposta SET aprovada = :aprovada, observacao = :observacao WHERE id = :id", nativeQuery = true)
+    @Query(value = "UPDATE tb_proposals SET approved = :approved, observation = :observation WHERE id = :id", nativeQuery = true)
     void updateProposal(Long id, boolean approved, String observation);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Proposal SET integrated = :integrated WHERE id = :id")
+    void updateIntegratedStatus(Long id, boolean integrated);
 }

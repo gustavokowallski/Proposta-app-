@@ -30,12 +30,10 @@ public class ProposalService {
 
     @Transactional
     public ProposalResponseDto createProposal(ProposalRequestDto dto){
-        Proposal entity = ProposalMapper.INSTANCE.convertDtoToProprosal(dto);
-
+        Proposal entity = proposalRepository.save(ProposalMapper.INSTANCE.convertDtoToProprosal(dto));
         notifyProposal(entity);
-        ProposalResponseDto response = ProposalMapper.INSTANCE.convertEntityToDto( proposalRepository.save(entity));
 
-        return response;
+        return ProposalMapper.INSTANCE.convertEntityToDto(entity);
     }
 
 
