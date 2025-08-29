@@ -1,6 +1,5 @@
 package com.pieropan.propostaapp.scheduler;
 
-import com.pieropan.propostaapp.entity.Proposal;
 import com.pieropan.propostaapp.repository.ProposalRepository;
 import com.pieropan.propostaapp.service.NotificationRabbitService;
 import org.springframework.beans.factory.annotation.Value;
