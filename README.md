@@ -16,3 +16,7 @@
 * **Mensageria:** RabbitMQ
 * **Banco de Dados:** PostgreSQL
 * **Contêineres:** Docker
+
+### **Arquitetura de Comunicação**
+
+O Serviço de Propostas recebe uma requisição, a salva no banco e a envia para uma fila, que é consumida pelo Serviço de Análise de Crédito. Depois age como consumer e recebe as propostas completas do outro serivço, depois atualiza o objeto no banco de dados.
